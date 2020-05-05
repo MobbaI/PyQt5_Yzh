@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
 
-# 单选按钮
 class Spinbox(QWidget):
     def __init__(self):
         super(Spinbox, self).__init__()

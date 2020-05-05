@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
 
-# 单选按钮
 class Slider(QWidget):
     def __init__(self):
         super(Slider, self).__init__()

@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
 
-# 单选按钮
 class Combobox(QWidget):
     def __init__(self):
         super(Combobox, self).__init__()

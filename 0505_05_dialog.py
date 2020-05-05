@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
 
-# 单选按钮
 class Dialog(QWidget):
     def __init__(self):
         super(Dialog, self).__init__()

@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 
 
-# 单选按钮
 class Checkbox(QWidget):
     def __init__(self):
         super(Checkbox, self).__init__()

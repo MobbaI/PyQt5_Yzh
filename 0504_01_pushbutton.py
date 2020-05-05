@@ -29,15 +29,15 @@ class Pushbutton(QWidget):
         self.button2.clicked.connect(lambda: self.on_clicked_button(self.button2))
         self.button3.setEnabled(False)
         # 默认按钮，一个窗口一个
-        # self.button4.setDefault(True)
-        # self.button4.clicked.connect(lambda: self.on_clicked_button(self.button4))
+        self.button4.setDefault(True)
+        self.button4.clicked.connect(lambda: self.on_clicked_button(self.button4))
         self.button5.clicked.connect(lambda: self.on_clicked_button(self.button5))
 
         vlayput = QVBoxLayout()
         vlayput.addWidget(self.button1)
         vlayput.addWidget(self.button2)
         vlayput.addWidget(self.button3)
-        # vlayput.addWidget(self.button4)
+        vlayput.addWidget(self.button4)
         vlayput.addWidget(self.button5)
 
         self.setLayout(vlayput)

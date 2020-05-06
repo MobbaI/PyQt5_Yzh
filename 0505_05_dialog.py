@@ -16,7 +16,7 @@ class Dialog(QWidget):
         self.button.move(100, 100)
         self.button.clicked.connect(self.openDialog)
 
-    # 刚开始没带self，只是零时变量，窗口一闪而过
+    # 刚开始没带self，只是临时变量，窗口一闪而过
     def openDialog(self):
         self.dialog = QDialog()
         self.dialog.setWindowTitle('对话框')

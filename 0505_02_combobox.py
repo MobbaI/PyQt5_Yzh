@@ -19,6 +19,8 @@ class Combobox(QWidget):
         self.cb.currentIndexChanged.connect(self.selectionChange)
         self.label2 = QLabel('感兴趣程度：')
         self.cb2 = QComboBox()
+        # 能否编辑默认是False
+        self.cb2.setEditable(True)
         self.cb2.addItems(['喜欢', '超爱', '无感', '厌恶'])
 
         vlayout.addWidget(self.label1)

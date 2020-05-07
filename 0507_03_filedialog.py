@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import Qt, QRegExp
+from PyQt5.QtCore import Qt, QRegExp, QDir
 
 
 class Filedialog(QWidget):
@@ -44,8 +44,8 @@ class Filedialog(QWidget):
         fdialog = QFileDialog()
         # 不太懂奥
         # 设置打开任何文件
-        # fdialog.setFileMode(QFileDialog.AnyFile)
-        # fdialog.setFilter(QDir.Files)
+        fdialog.setFileMode(QFileDialog.AnyFile)
+        fdialog.setFilter(QDir.Files)
 
         if fdialog.exec_():
             filenames = fdialog.selectedFiles()

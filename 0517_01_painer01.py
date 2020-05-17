@@ -14,12 +14,12 @@ class PainterPi(QWidget):
     def paintEvent(self, QPaintEvent):
         painter = QPainter()
         painter.begin(self)
-        # painter.setPen(Qt.red)
+        painter.setPen(Qt.darkMagenta)
         size = self.size()
 
         for i in range(1000):
-            x = 100.0 * math.sin(-1 * math.pi + math.pi * 2.0 * (i/1000)) + 150
-            y = 50.0 * math.cos(-1 * math.pi + math.pi * 2.0 * (i/1000)) + 150
+            x = size.width()/3 * math.sin(-1 * math.pi + math.pi * 2.0 * (i/1000)) + size.width()/2
+            y = size.height()/6 * math.cos(-1 * math.pi + math.pi * 2.0 * (i/1000)) + size.height()/2
             painter.drawPoint(x, y)
 
         painter.end()

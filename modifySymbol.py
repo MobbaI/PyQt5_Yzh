@@ -1,15 +1,19 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QVBoxLayout,QHBoxLayout, QPushButton, QLineEdit, QWidget, QLabel, \
+from PyQt5.QtWidgets import QApplication, QVBoxLayout,QHBoxLayout, QPushButton, QLineEdit, QWidget, \
     QCheckBox, QFileDialog, QMessageBox
 from PyQt5.QtCore import QThread, pyqtSignal
 import openpyxl
 import os
 import re
+import copy
 
 
-class DeleteNot(QWidget):
+num = 0
+
+
+class ModifySymbolMain(QWidget):
     def __init__(self):
-        super(DeleteNot, self).__init__()
+        super(ModifySymbolMain, self).__init__()
         self.fname = ''
         self.initUI()
 
@@ -68,31 +72,115 @@ class DeleteNot(QWidget):
         else:
             self.button_1.setEnabled(False)
             self.button_2.setEnabled(False)
-            wb = openpyxl.load_workbook(self.fname)
-            try:
-                ws = wb['测试记录']
-            except:
-                pass
-            self.modify1 = ModifySymbol('U', self.checkbox1.checkState())
-            self.modify2 = ModifySymbol('W', self.checkbox2.checkState())
-            self.modify3 = ModifySymbol('X', self.checkbox3.checkState())
-            self.modify4 = ModifySymbol('Y', self.checkbox4.checkState())
+
+            self.wb = openpyxl.load_workbook(self.fname)
+
+            ws = self.wb['测试记录']
+
+            self.modify1 = ModifySymbol(ws, 'U', '运行', self.checkbox1.checkState())
+            self.modify2 = ModifySymbol(ws, 'W', 'UI', self.checkbox2.checkState())
+            self.modify3 = ModifySymbol(ws, 'X', '模型问题', self.checkbox3.checkState())
+            self.modify4 = ModifySymbol(ws, 'Y', '场景问题', self.checkbox4.checkState())
+            self.finish = Finish()
+            self.modify1.sinOut.connect(self.abc)
+            self.modify2.sinOut.connect(self.abc2)
+            self.modify2.sinOut.connect(self.abc3)
+            self.modify2.sinOut.connect(self.abc4)
+            self.finish.sinOut.connect(self.abc5)
+            self.modify1.start()
+            self.modify2.start()
+            self.modify3.start()
+            self.modify4.start()
+            self.finish.start()
+
+    def abc(self, abc):
+        global num
+        if abc == 'U':
+            num += 1
+
+    def abc2(self, abc):
+        global num
+        if abc == 'W':
+            num += 1
+
+    def abc3(self, abc):
+        global num
+        if abc == 'W':
+            num += 1
+
+    def abc4(self, abc):
+        global num
+        if abc == 'W':
+            num += 1
+
+    def abc5(self, abc):
+        if abc == 1:
+            self.button_1.setEnabled(True)
+            self.button_2.setEnabled(True)
+            fnamenew = self.fname.rstrip('.xlsx')
+            self.wb.save('{}_new.xlsx'.format(fnamenew))
+            QMessageBox.information(self, '提示', '已完成')
 
 
 class ModifySymbol(QThread):
-    sinOut = pyqtSignal(int)
+    sinOut = pyqtSignal(str)
 
-    def __init__(self, column, checkbox_state):
+    def __init__(self, ws, column, name, checkbox_state):
         super(ModifySymbol, self).__init__()
+        self.ws = ws
         self.column = column
+        self.name = name
         self.checkbox_state = checkbox_state
 
     def run(self):
+        # wb = openpyxl.load_workbook(self.fname)
+        if self.checkbox_state == 2:
+            try:
+                # ws = wb['测试记录']
+                font = self.ws['Q12'].font
+                alignment = self.ws['Q12'].alignment
+                # fill = ws['Q17'].fill
+                for i in range(17, 141):
+                    cell = self.ws['{}{}'.format(self.column, i)]
+                    if cell.value == 'U':
+                        bug_name = self.ws['AQ{}'.format(i)].value
+                        if bug_name:
+                            pattern = '.*?.{}\(P.*?'.format(self.name)
+                            result = re.match(pattern, bug_name)
+                            if not result:
+                                cell.value = '√'
+                                cell.font = copy.copy(font)
+                                cell.alignment = copy.copy(alignment)
+                        else:
+                            cell.value = '√'
+                            cell.font = copy.copy(font)
+                            cell.alignment = copy.copy(alignment)
+                            # cell.fill = copy.copy(fill)
+                # fnamenew = self.fname.rstrip('.xlsx')
+                # wb.save('{}_new.xlsx'.format(fnamenew))
+            except Exception as e:
+                print(e)
+        self.sinOut.emit(self.column)
 
+
+class Finish(QThread):
+    sinOut = pyqtSignal(int)
+
+    def __init__(self):
+        super(Finish, self).__init__()
+
+    def run(self):
+        global num
+        while True:
+            if num == 4:
+                self.sinOut.emit(1)
+                num = 0
+                break
+            self.sleep(1)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    deletenot = DeleteNot()
-    deletenot.show()
+    modifysymbolmain = ModifySymbolMain()
+    modifysymbolmain.show()
     sys.exit(app.exec_())
